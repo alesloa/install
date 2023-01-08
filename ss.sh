@@ -55,8 +55,10 @@ upload_proxy() {
     local PASS=$(random)
     zip proxy.zip proxy.txt
     cp proxy.txt /root/proxy.txt
-    cp proxy.txt /usr/share/nginx/proxy.txt
-    #URL=$(curl -s --upload-file proxy.zip https://transfer.sh/proxy.zip)
+	cp proxy.txt /usr/share/nginx/html/proxy.txt
+	sh -c "firewall-cmd --permanent --zone=public --add-service=http && firewall-cmd --permanent --zone=public --add-service=https && firewall-cmd --reload"
+	systemctl start nginx
+    URL=$(curl -s --upload-file proxy.zip https://transfer.sh/proxy.zip)
 
     echo "Proxy is ready! Format IP:PORT:LOGIN:PASS"
     echo "Download zip archive from: ${URL}"
